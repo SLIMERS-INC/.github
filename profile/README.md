@@ -1,4 +1,4 @@
-### 2024 HyperionTriad. All rights reserved.
+### 2024 Aetherlis. All rights reserved.
 
 Xyzzr  
 Monolith

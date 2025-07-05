@@ -1,4 +1,4 @@
-    <script type="module">
+
       function fms(bytes) {
         if (bytes >= 1e9) return (bytes / 1e9).toFixed(2) + ' GB';
         if (bytes >= 1e6) return (bytes / 1e6).toFixed(2) + ' MB';

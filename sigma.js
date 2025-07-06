@@ -37,15 +37,32 @@ function fms(bytes) {
                 btn.onclick = async () => {
                     if (btn.disabled) return;
                     btn.disabled = true;
-                    let dots = 0;
-                    btn.textContent = 'Downloading';
-                    const anim = setInterval(() => {
-                        dots = (dots + 1) % 4;
-                        btn.textContent = 'Downloading' + '.'.repeat(dots);
-                    }, 500);
+
                     try {
-                        const buf = await node.downloadBuffer();
-                        const url = URL.createObjectURL(new Blob([buf]));
+                        const dl = await node.download();
+                        const total = node.size;
+                        let received = 0;
+                        const chunks = [];
+
+                        const reader = dl.stream().getReader();
+
+                        const read = async () => {
+                            while (true) {
+                                const {
+                                    done,
+                                    value
+                                } = await reader.read();
+                                if (done) break;
+                                chunks.push(value);
+                                received += value.length;
+                                btn.textContent = `${fms(received)} / ${fms(total)}`;
+                            }
+                        };
+
+                        await read();
+
+                        const blob = new Blob(chunks);
+                        const url = URL.createObjectURL(blob);
                         const a = document.createElement('a');
                         a.href = url;
                         a.download = node.name;
@@ -57,11 +74,11 @@ function fms(bytes) {
                         console.error('Download error:', e);
                         alert('Download failed :(');
                     } finally {
-                        clearInterval(anim);
                         btn.textContent = 'Download';
                         btn.disabled = false;
                     }
                 };
+
                 const right = document.createElement('div');
                 right.className = 'right-group';
                 right.appendChild(sizebox);
@@ -80,5 +97,6 @@ function fms(bytes) {
     }
 })();
 document.getElementById('info-link').addEventListener('click', (e) => {
-    e.preventDefault();alert("\nCreated by discord.gg/E8dbWyYpPH\n\nWe can't guarantee these files are safe. Download them at your own risk.");
+    e.preventDefault();
+    alert("\nCreated by discord.gg/E8dbWyYpPH\n\nWe can't guarantee these files are safe. Download them at your own risk.");
 });

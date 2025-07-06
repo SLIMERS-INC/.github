@@ -34,50 +34,48 @@ function fms(bytes) {
                 const btn = document.createElement('button');
                 btn.className = 'download-btn';
                 btn.textContent = 'Download';
-                btn.onclick = async () => {
-                    if (btn.disabled) return;
-                    btn.disabled = true;
+btn.onclick = async () => {
+  if (btn.disabled) return;
+  btn.disabled = true;
 
-                    try {
-                        const dl = await node.download();
-                        const total = node.size;
-                        let received = 0;
-                        const chunks = [];
+  try {
+    const total = node.size;
+    let received = 0;
+    const chunks = [];
 
-                        const reader = dl.stream().getReader();
+    const dl = await node.download({}, {
+      onProgress: (bytes) => {
+        received = bytes;
+        btn.textContent = `${fms(received)} / ${fms(total)}`;
+      }
+    });
 
-                        const read = async () => {
-                            while (true) {
-                                const {
-                                    done,
-                                    value
-                                } = await reader.read();
-                                if (done) break;
-                                chunks.push(value);
-                                received += value.length;
-                                btn.textContent = `${fms(received)} / ${fms(total)}`;
-                            }
-                        };
+    const reader = dl.stream().getReader();
 
-                        await read();
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      chunks.push(value);
+    }
 
-                        const blob = new Blob(chunks);
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = node.name;
-                        document.body.appendChild(a);
-                        a.click();
-                        a.remove();
-                        URL.revokeObjectURL(url);
-                    } catch (e) {
-                        console.error('Download error:', e);
-                        alert('Download failed :(');
-                    } finally {
-                        btn.textContent = 'Download';
-                        btn.disabled = false;
-                    }
-                };
+    const blob = new Blob(chunks);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = node.name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    console.error('Download error:', e);
+    alert('Download failed :(');
+  } finally {
+    btn.textContent = 'Download';
+    btn.disabled = false;
+  }
+};
+
 
                 const right = document.createElement('div');
                 right.className = 'right-group';

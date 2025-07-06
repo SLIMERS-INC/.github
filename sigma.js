@@ -15,7 +15,7 @@ function fms(bytes) {
                 const fold = document.createElement('li');
                 fold.textContent = node.name + '/';
                 fold.className = 'folder';
-                if (depth) fold.style.paddingLeft = `${depth * 1.5}rem`;
+                if (depth) fold.style.paddingLeft = ${depth * 1.5}rem;
                 document.getElementById('file-list').appendChild(fold);
                 for (const child of node.children) {
                     await walk(child, depth + 1);
@@ -23,7 +23,7 @@ function fms(bytes) {
             } else {
                 const li = document.createElement('li');
                 li.className = 'file' + (depth ? ' sub' : '');
-                if (depth) li.style.paddingLeft = `${depth * 1.5}rem`;
+                if (depth) li.style.paddingLeft = ${depth * 1.5}rem;
                 const size = fms(node.size);
                 const name = document.createElement('div');
                 name.className = 'filename-box';
@@ -34,48 +34,34 @@ function fms(bytes) {
                 const btn = document.createElement('button');
                 btn.className = 'download-btn';
                 btn.textContent = 'Download';
-btn.onclick = async () => {
-  if (btn.disabled) return;
-  btn.disabled = true;
-
-  const totalSize = node.size;
-  let downloadedSize = 0;
-
-  btn.textContent = `0 / ${fms(totalSize)}`;
-
-  try {
-    const dl = await node.download(
-      {},
-      {
-        onProgress: (bytes) => {
-          downloadedSize = bytes;
-          btn.textContent = `${fms(downloadedSize)} / ${fms(totalSize)}`;
-        },
-        onComplete: (blob) => {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = node.name;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          URL.revokeObjectURL(url);
-
-          btn.textContent = 'Download';
-          btn.disabled = false;
-        }
-      }
-    );
-  } catch (e) {
-    console.error('Download error:', e);
-    alert('Download failed :(');
-    btn.textContent = 'Download';
-    btn.disabled = false;
-  }
-};
-
-
-
+                btn.onclick = async () => {
+                    if (btn.disabled) return;
+                    btn.disabled = true;
+                    let dots = 0;
+                    btn.textContent = 'Downloading';
+                    const anim = setInterval(() => {
+                        dots = (dots + 1) % 4;
+                        btn.textContent = 'Downloading' + '.'.repeat(dots);
+                    }, 500);
+                    try {
+                        const buf = await node.downloadBuffer();
+                        const url = URL.createObjectURL(new Blob([buf]));
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = node.name;
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        URL.revokeObjectURL(url);
+                    } catch (e) {
+                        console.error('Download error:', e);
+                        alert('Download failed :(');
+                    } finally {
+                        clearInterval(anim);
+                        btn.textContent = 'Download';
+                        btn.disabled = false;
+                    }
+                };
                 const right = document.createElement('div');
                 right.className = 'right-group';
                 right.appendChild(sizebox);
@@ -94,6 +80,5 @@ btn.onclick = async () => {
     }
 })();
 document.getElementById('info-link').addEventListener('click', (e) => {
-    e.preventDefault();
-    alert("\nCreated by discord.gg/E8dbWyYpPH\n\nWe can't guarantee these files are safe. Download them at your own risk.");
+    e.preventDefault();alert("\nCreated by discord.gg/E8dbWyYpPH\n\nWe can't guarantee these files are safe. Download them at your own risk.");
 });

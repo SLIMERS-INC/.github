@@ -64,8 +64,7 @@ function fms(bytes) {
                         a.remove();
                         URL.revokeObjectURL(url);
                     } catch (e) {
-                        console.error('Download error:', e);
-                        alert('Download failed :(');
+                        console.error('download error:', e);alert('download failed :(');
                     } finally {
                         clearInterval(anim);
                         btn.textContent = 'Download';

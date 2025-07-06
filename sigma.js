@@ -38,43 +38,42 @@ btn.onclick = async () => {
   if (btn.disabled) return;
   btn.disabled = true;
 
+  const totalSize = node.size;
+  let downloadedSize = 0;
+
+  btn.textContent = `0 / ${fms(totalSize)}`;
+
   try {
-    const total = node.size;
-    let received = 0;
-    const chunks = [];
+    const dl = await node.download(
+      {},
+      {
+        onProgress: (bytes) => {
+          downloadedSize = bytes;
+          btn.textContent = `${fms(downloadedSize)} / ${fms(totalSize)}`;
+        },
+        onComplete: (blob) => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = node.name;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
 
-    const dl = await node.download({}, {
-      onProgress: (bytes) => {
-        received = bytes;
-        btn.textContent = `${fms(received)} / ${fms(total)}`;
+          btn.textContent = 'Download';
+          btn.disabled = false;
+        }
       }
-    });
-
-    const reader = dl.stream().getReader();
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      chunks.push(value);
-    }
-
-    const blob = new Blob(chunks);
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = node.name;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
+    );
   } catch (e) {
     console.error('Download error:', e);
     alert('Download failed :(');
-  } finally {
     btn.textContent = 'Download';
     btn.disabled = false;
   }
 };
+
 
 
                 const right = document.createElement('div');

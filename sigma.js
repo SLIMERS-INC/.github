@@ -80,5 +80,5 @@ function fms(bytes) {
     }
 })();
 document.getElementById('info-link').addEventListener('click', (e) => {
-    e.preventDefault();alert("\nCreated by SLME\nLeaks by discord.gg/skidding\n\nWe can't guarantee these files are safe. Download them at your own risk.");
+    e.preventDefault();alert("\nCreated by discord.gg/E8dbWyYpPH\nLeaks by discord.gg/skidding\n\nWe can't guarantee these files are safe. Download them at your own risk.");
 });

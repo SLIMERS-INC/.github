@@ -38,8 +38,10 @@
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         display: flex;
         align-items: center;
+
         justify-content: center;
-        gap: 1.25rem;
+        gap: 2rem;
+
         padding: 0.5rem 1.25rem;
         font-weight: 700;
         font-size: 1rem;
@@ -47,23 +49,16 @@
         z-index: 1000;
         user-select: none;
         border-radius: 50px;
-        min-width: max-content;
+
+        width: fit-content;
+        min-width: unset;
       }
 
-      .left-text {
-        user-select: none;
-        text-align: left;
-        position: relative;
-        cursor: default;
-        font-size: 1rem;
+      .center-text {
         font-weight: 700;
-      }
-
-      .right-controls {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
+        font-size: 1rem;
         user-select: none;
+        cursor: default;
       }
 
       #info-link,
@@ -271,22 +266,17 @@
   </head>
 
   <body>
-<header class="topbar">
-  <div class="nav-section">
-    <a href="#" id="info-link">info</a>
-  </div>
-  <div class="center-text">skidbin</div>
-  <div class="nav-section">
-    <a
-      href="https://mega.nz/folder/ak5WhZpa#fAD6NBnZi9mfOT5UIeQWhA"
-      target="_blank"
-      rel="noopener"
-      class="mega-link"
-      >mega</a
-    >
-  </div>
-</header>
-
+    <header class="topbar">
+      <a href="#" id="info-link" class="nav-link">info</a>
+      <span class="center-text">skidbin</span>
+      <a
+        href="https://mega.nz/folder/ak5WhZpa#fAD6NBnZi9mfOT5UIeQWhA"
+        target="_blank"
+        rel="noopener"
+        class="mega-link"
+        >mega</a
+      >
+    </header>
 
     <main class="content">
       <ul id="file-list">

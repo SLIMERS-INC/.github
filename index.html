@@ -29,9 +29,11 @@
         </p>
       </footer>
     </main>
-
-    <script src="https://unpkg.com/megajs@1/dist/main.browser-umd.js"></script>
-    <script src="/stuff/sky.js"></script>
-    <script src="/stuff/filehandler.js"></script>
+<script src="https://unpkg.com/megajs@1/dist/main.browser-umd.js"></script>
+<script src="/stuff/sky.js"></script>
+<script src="/stuff/filehandler.js"></script>
+<script>
+  document.getElementById('info-link').addEventListener('click', (e) => {e.preventDefault(); alert("Safety Notice:\n\nThe safety of these files is not certified. Download and run them at your own risk.");}); // real
+</script>
   </body>
 </html>

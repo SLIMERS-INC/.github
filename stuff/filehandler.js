@@ -10,6 +10,7 @@ function fms(bytes) {
         const folder = mega.File.fromURL('https://mega.nz/folder/ak5WhZpa#fAD6NBnZi9mfOT5UIeQWhA');
         await folder.loadAttributes();
         document.getElementById('file-list').innerHTML = '';
+        let fuh1 = 0; let fuh2 = 0;
 
         const walk = async (node, depth = 0) => {
             if (node.directory) {
@@ -17,6 +18,9 @@ function fms(bytes) {
                     await walk(child, depth + 1);
                 }
             } else {
+                fuh1++;
+                fuh2 += node.size;
+
                 const li = document.createElement('li');
                 li.className = 'file' + (depth ? ' sub' : '');
                 if (depth) li.style.paddingLeft = `${depth * 1.5}rem`;
@@ -35,7 +39,7 @@ function fms(bytes) {
                 btn.className = 'download-btn';
                 btn.textContent = 'download';
 
-                btn.onclick = async () => { // fuckass download logic bro
+                btn.onclick = async () => {
                     if (btn.disabled) return;
                     btn.disabled = true;
 
@@ -82,6 +86,8 @@ function fms(bytes) {
         };
 
         await walk(folder);
+        console.log(`loaded ${fuh1} files`);
+        console.log(`these fuckass files take ${fms(fuh2)} storage`);
     } catch (e) {
         console.error(e);
         document.getElementById('file-list').textContent = 'error loading :( refresh website!!';

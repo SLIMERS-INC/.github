@@ -35,7 +35,7 @@ function fms(bytes) {
                 btn.className = 'download-btn';
                 btn.textContent = 'download';
 
-                btn.onclick = async () => {
+                btn.onclick = async () => { // fuckass download logic bro
                     if (btn.disabled) return;
                     btn.disabled = true;
 

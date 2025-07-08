@@ -19,7 +19,7 @@ class star {
         this.y = Math.random() * height;
         this.radius = Math.random() * 1.2 + 0.3;
         this.alpha = rndrange(0.5, 0.9);
-        this.alphaspeed = rndrange(0.001, 0.003);
+        this.alphaspeed = rndrange(0.001, 0.007);
         this.alphadirection = Math.random() > 0.5 ? 1 : -1;
     }
     update() {

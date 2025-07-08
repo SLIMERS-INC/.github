@@ -93,7 +93,7 @@ function inicomets(count = 1) {
     }
 }
 
-let lcomet = 0; const cometi = 7000;
+let lcomet = 0; const cometi = 5000;
 
 function anim(timestamp) {
     ctx.clearRect(0, 0, width, height);

@@ -29,7 +29,7 @@ function fms(bytes) {
 
                 const name = document.createElement('div');
                 name.className = 'filename-box';
-                name.textContent = node.name;
+                name.textContent = node.name.replace(/\.(7z|zip|rar)$/i, ''); // ye
 
                 const sizebox = document.createElement('div');
                 sizebox.className = 'filesize-box';

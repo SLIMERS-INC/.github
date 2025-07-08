@@ -18,17 +18,17 @@ class star {
         this.x = Math.random() * width;
         this.y = Math.random() * height;
         this.radius = Math.random() * 1.2 + 0.3;
-        this.alpha = Math.random();
-        this.alphaspeed = 0.01 + Math.random() * 0.02;
+        this.alpha = rndrange(0.5, 0.9);
+        this.alphaspeed = rndrange(0.001, 0.003);
         this.alphadirection = Math.random() > 0.5 ? 1 : -1;
     }
     update() {
         this.alpha += this.alphaspeed * this.alphadirection;
-        if (this.alpha <= 0) {
-            this.alpha = 0;
+        if (this.alpha <= 0.5) {
+            this.alpha = 0.5;
             this.alphadirection = 1;
-        } else if (this.alpha >= 1) {
-            this.alpha = 1;
+        } else if (this.alpha >= 0.9) {
+            this.alpha = 0.9;
             this.alphadirection = -1;
         }
     }
@@ -36,8 +36,8 @@ class star {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
-        ctx.shadowColor = 'rgba(255,255,255,0.7)';
-        ctx.shadowBlur = 6;
+        ctx.shadowColor = 'rgba(255,255,255,0.6)';
+        ctx.shadowBlur = 4;
         ctx.fill();
     }
 }
@@ -58,9 +58,6 @@ class comet {
     update() {
         this.x += this.speed;
         this.y += this.speed * 0.2;
-        if (this.x - this.traillength > width || this.y > height) {
-            this.reset();
-        }
     }
     draw() {
         let grad = ctx.createLinearGradient(this.x, this.y, this.x - this.traillength, this.y - this.traillength * 0.2);
@@ -89,33 +86,36 @@ function inistars(count = 150) {
     }
 }
 
-function inicomets(count = 3) {
+function inicomets(count = 1) {
     comets = [];
     for (let i = 0; i < count; i++) {
         comets.push(new comet());
-        comets[i].x = rndrange(-150, 50);
-        comets[i].y = rndrange(0, height * 0.7);
     }
 }
 
-function anim() {
+let lcomet = 0; const cometi = 7000;
+
+function anim(timestamp) {
     ctx.clearRect(0, 0, width, height);
     stars.forEach(s => {
         s.update();
         s.draw();
     });
 
-    if (Math.random() < 0.01 && comets.length < 5) {
+    if (timestamp - lcomet > cometi && comets.length < 2) {
         comets.push(new comet());
+        lcomet = timestamp;
     }
 
-    comets.forEach((c, i) => {
+    for (let i = comets.length - 1; i >= 0; i--) {
+        let c = comets[i];
         c.update();
         c.draw();
         if (c.x > width + 100 || c.y > height + 100) {
             comets.splice(i, 1);
         }
-    });
+    }
+
     requestAnimationFrame(anim);
 }
 
@@ -127,4 +127,4 @@ function onresz() {
 
 window.addEventListener('resize', onresz);
 onresz();
-anim();
+requestAnimationFrame(anim);

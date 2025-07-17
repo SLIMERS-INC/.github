@@ -7,7 +7,7 @@ body,header.topbar{color:#e0e6ff;display:flex}#sky,body,main.content{height:100v
 ::-webkit-scrollbar-thumb {background: linear-gradient(180deg, #4e5ab0 0%, #8ab4f8 100%);border: 3px solid #0b0f26;border-radius: 6px;}
 ::-webkit-scrollbar-thumb:hover {background: linear-gradient(180deg, #5f6cc7 0%, #b2c4ff 100%);}
 * {scrollbar-width: thin;scrollbar-color: #4e5ab0 #0b0f26;}
-::-webkit-scrollbar-button {display: none;height: 0;width: 0;}
+::-webkit-scrollbar-button {display: none;height: 0;width: 0;} /* bro u fucking suck fuck is this even ment to do */
 
 /* mobile */
 @media (max-width:560px){header.topbar{font-size:.95rem;padding:.5rem 1.2rem;flex-direction:column;align-items:flex-start}.right-controls{gap:.8rem;flex-wrap:wrap}li.file{flex-direction:column;align-items:flex-start;padding:1rem;gap:.6rem}.filename-box{width:100%}.right-group{width:100%;justify-content:space-between;flex-wrap:wrap}}

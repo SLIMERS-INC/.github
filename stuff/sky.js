@@ -43,9 +43,7 @@ class star {
 }
 
 class comet {
-    constructor() {
-        this.reset();
-    }
+    constructor() { this.reset(); }
     reset() {
         this.x = rndrange(-150, 50);
         this.y = rndrange(0, height * 0.5);
@@ -115,7 +113,6 @@ function anim(timestamp) {
             comets.splice(i, 1);
         }
     }
-
     requestAnimationFrame(anim);
 }
 

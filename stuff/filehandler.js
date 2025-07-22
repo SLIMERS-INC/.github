@@ -88,7 +88,8 @@ function fms(bytes) {
         await walk(folder);
         console.log(`loaded ${fuh1} files`);
         console.log(`these fuckass files take up ${fms(fuh2)}`);
-        console.log(`last updated 8/7/2025`);
+        console.log(`last updated 23/7/2025`);
+        console.log(`Note: i hate it here`);
     } catch (e) {
         console.error(e);
         document.getElementById('file-list').textContent = 'error loading :( refresh website!!';

@@ -90,7 +90,6 @@ function fms(bytes) {
         console.log(`these fuckass files take up ${fms(fuh2)}`);
         console.log(`last updated 23/7/2025`);
         console.log(`Note: files.catbox.moe/9crw55.png`);
-        console.log(`credits to skid leaks for most of the leaks btw`);
     } catch (e) {
         console.error(e);
         document.getElementById('file-list').textContent = 'error loading :( refresh website!!';

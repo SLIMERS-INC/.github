@@ -89,7 +89,7 @@ function fms(bytes) {
         console.log(`loaded ${fuh1} files`);
         console.log(`these fuckass files take up ${fms(fuh2)}`);
         console.log(`last updated 23/7/2025`);
-        console.log(`Note: i hate it here`);
+        console.log(`Note: files.catbox.moe/9crw55.png`);
     } catch (e) {
         console.error(e);
         document.getElementById('file-list').textContent = 'error loading :( refresh website!!';

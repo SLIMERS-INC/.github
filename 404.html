@@ -1,1 +1,33 @@
-yay!
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>skidbin</title>
+    <link rel="icon" href="/stuff/moon.png" type="image/png">
+     <link rel="stylesheet" href="/stuff/404.css" />
+  </head>
+  <body>
+    <canvas id="sky"></canvas>
+    <header class="topbar" role="banner" aria-label="Main navigation">
+      <div class="title-text">skidbin</div>
+      <div class="flex-spacer"></div>
+      <nav class="right-controls" role="navigation" aria-label="Topbar links">
+        <a href="#" id="safety" tabindex="0">Safety</a>
+        <a href="https://mega.nz/folder/ak5WhZpa#fAD6NBnZi9mfOT5UIeQWhA" target="_blank" rel="noopener" class="mega-link" tabindex="0">Mega.nz</a>
+        <a href="https://discord.gg/5dJYYuh279" target="_blank" rel="noopener" class="mega-link" tabindex="0">Discord</a> <!-- I was going to make the invite skid leaks, but instead of reaching out, they’re just trying to ban me. Most of the leaks aren’t even from them. -->
+      </nav>
+    </header>
+    <main class="content" role="main" tabindex="0">
+      <div class="error-box">
+        <h1>404 - Page Not Found</h1>
+        <p>The page you're looking for doesn't exist or has been removed.</p>
+        <a href="/" class="home-button">Go Home</a>
+      </div>
+    </main>
+    <script src="/stuff/sky.js"></script>
+    <script>
+document.getElementById('safety').addEventListener('click', (e) => {e.preventDefault();alert("Safety Notice:\n\nThese source projects are not officially verified for safety. Do not run any prebuilt .exe files included in the folders.");});
+    </script>
+  </body>
+</html>

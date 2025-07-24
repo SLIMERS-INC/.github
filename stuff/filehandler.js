@@ -88,7 +88,7 @@ function fms(bytes) {
         await walk(folder);
         console.log(`loaded ${fuh1} files`);
         console.log(`these fuckass files take up ${fms(fuh2)}`);
-        console.log(`last updated 23/7/2025`);
+        console.log(`last updated 24/7/2025`);
         console.log(`Note: hi`);
     } catch (e) {
         console.error(e);

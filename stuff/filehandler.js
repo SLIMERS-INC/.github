@@ -26,7 +26,8 @@ function fms(bytes) {
                 if (depth) li.style.paddingLeft = `${depth * 1.5}rem`;
 
                 const size = fms(node.size);
-
+                
+                console.log(node.name);
                 const name = document.createElement('div');
                 name.className = 'filename-box';
                 name.textContent = node.name.replace(/\.(7z|zip|rar)$/i, ''); // ye

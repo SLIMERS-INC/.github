@@ -44,18 +44,23 @@
 
     async function loadFileMeta() {
       const res = await fetch('/stuff/data.json');
-      const data = await res.json();
-      return data.files || {};
+      const rawText = await res.text();
+      const jsonLike = rawText
+        .replace(/^\s*files\s*=\s*/, '')
+        .replace(/\["(.+?)"\]\s*=/g, '"$1":')
+        .replace(/(\w+)\s*=/g, '"$1":')
+        .replace(/,?\s*}$/, '}');
+      return JSON.parse(jsonLike);
     }
 
     async function displayFiles() {
       const fileList = document.getElementById('file-list');
       fileList.innerHTML = '';
-      const meta = await loadFileMeta();
+      const metaData = await loadFileMeta();
 
       const folder = mega.File.fromURL('https://mega.nz/folder/ak5WhZpa#fAD6NBnZi9mfOT5UIeQWhA');
       await folder.loadAttributes();
-// chatgpt ass code
+
       const walk = async (node) => {
         if (node.directory) {
           for (const child of node.children) {
@@ -65,8 +70,13 @@
           const li = document.createElement('li');
           li.className = 'file';
 
-          const info = meta[node.name] || {};
-          const verified = info.verified ? 'Verified' : 'Unverified';
+          const info = metaData[node.name] || {
+            desc: 'No desc',
+            uploader: 'Pvhak',
+            verified: false
+          };
+
+          const verifiedText = info.verified ? 'Verified' : 'Unverified';
           const statusColor = info.verified ? '#2ecc71' : '#e74c3c';
 
           const title = document.createElement('div');
@@ -75,13 +85,13 @@
           title.style.padding = '0.2rem 0.5rem';
           title.style.borderRadius = '8px';
           title.style.marginBottom = '0.5rem';
-          title.textContent = `${node.name} - ${verified}`;
+          title.textContent = `${node.name} - ${verifiedText}`;
 
           const desc = document.createElement('div');
-          desc.textContent = `Description: ${info.desc || 'n/a'}`;
+          desc.textContent = `Description: ${info.desc}`;
 
           const uploader = document.createElement('div');
-          uploader.textContent = `Uploaded by: ${info.uploader || 'n/a'}`;
+          uploader.textContent = `Uploaded by: ${info.uploader}`;
 
           const size = document.createElement('div');
           size.textContent = `File size: ${fms(node.size)}`;

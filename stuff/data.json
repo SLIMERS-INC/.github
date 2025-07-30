@@ -1,7 +1,9 @@
-files = {
-  ["NkSourceFeb2025.zip"] = {
-    desc = "soooo sigma",
-    uploader = "pvhak",
-    verified = true
-  },
+{
+  "files": {
+    "NkSourceFeb2025.zip": {
+      "desc": "soooo sigma",
+      "uploader": "pvhak",
+      "verified": true
+    }
+  }
 }

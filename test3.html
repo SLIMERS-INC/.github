@@ -9,7 +9,320 @@
     <meta property="og:description" content="Ready to skid?">
     <meta property="og:url" content="https://skidbin.vercel.app/">
     <meta name="theme-color" content="#FFFFFF">
-    <link rel="stylesheet" href="/stuff/test.css">
+    <style>
+      :root {
+  --rad: 16px;
+  --crd-bdr: rgba(255 255 255 / 0.15);
+  --crd-bg: rgba(26, 35, 72, 0.25);
+  --smooth-duration: 0.3s;
+  --smooth-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --shd: 0 4px 15px rgba(67, 86, 150, 0.3);
+  --card-hover: rgba(138, 180, 248, 0.7);
+}
+
+/* main */
+body,
+header.topbar {
+  color: #e0e6ff;
+  display: flex;
+}
+#sky,
+body,
+main.content {
+  height: 100vh;
+}
+*,
+main.content {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+    Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  background: #0b0f26;
+  overflow-x: hidden;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+}
+#sky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(ellipse at center, #0b0f26 0, #050822 90%);
+}
+header.topbar {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgb(20 25 50 / 0.85);
+  backdrop-filter: blur(12px);
+  border: 2px solid rgb(80 90 150 / 0.5);
+  box-shadow: 0 4px 20px rgb(0 0 0 / 0.9);
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 2rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  z-index: 1000;
+  border-radius: 50px;
+  flex-wrap: wrap;
+  max-width: 90vw;
+  min-width: min-content;
+}
+a#safety,
+a.mega-link,
+li.folder {
+  position: relative;
+  font-weight: 600;
+}
+.title-text {
+  font-size: 1.3rem;
+  cursor: default;
+  white-space: nowrap;
+}
+.flex-spacer {
+  flex-grow: 1;
+}
+.right-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+a#safety,
+a.mega-link {
+  color: #8ab4f8;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s, text-shadow 0.3s;
+  font-size: 1rem;
+  padding: 0.25rem 0;
+}
+a#safety:hover,
+a.mega-link:hover {
+  color: #e8ecff;
+  text-shadow: 0 0 6px rgb(255 255 255 / 0.45);
+}
+main.content {
+  padding: 90px 1rem 3.5rem;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  position: relative;
+  z-index: 10;
+}
+
+/* Container for files - grid 3 per row */
+ul#file-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 1100px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+/* File card styled like .exp-crd */
+li.file {
+  position: relative;
+  border-radius: var(--rad);
+  border: 1px solid var(--crd-bdr);
+  background-color: var(--crd-bg);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+  transition: all var(--smooth-duration) var(--smooth-ease);
+  height: 100%;
+  min-height: 380px;
+  max-height: 420px;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(0);
+  box-shadow: var(--shd);
+  will-change: transform;
+  cursor: default;
+  padding: 1.25rem 1.5rem;
+}
+
+li.file:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 15px 30px -5px var(--card-hover);
+  border-color: var(--card-hover);
+  z-index: 20;
+  transition:
+    transform var(--smooth-duration) var(--smooth-ease),
+    box-shadow var(--smooth-duration) var(--smooth-ease),
+    border-color var(--smooth-duration) var(--smooth-ease);
+}
+
+/* Container around filename and badge */
+.filename-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* The filename box itself */
+.filename-box {
+  background-color: rgba(20, 25, 50, 0.6);
+  padding: 0.5rem 0.8rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #cbd5ff;
+  user-select: text;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  flex-shrink: 1; /* Allow shrink */
+  max-width: calc(100% - 90px); /* Leave space for badge */
+}
+
+/* Status badge */
+.status-badge {
+  padding: 0.25rem 0.65rem;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  border: 2px solid;
+  user-select: none;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.2);
+}
+
+/* Verified style - warm green */
+.status-badge.verified {
+  background: linear-gradient(135deg, #38b000, #4caf50);
+  border-color: #2e7d32;
+  box-shadow: 0 0 10px #38b000aa;
+}
+
+/* Unverified style - warm red */
+.status-badge.unverified {
+  background: linear-gradient(135deg, #ff4d4d, #d32f2f);
+  border-color: #b71c1c;
+  box-shadow: 0 0 10px #ff4d4daa;
+}
+
+
+/* Download button */
+button.download-btn {
+  margin-top: auto;
+  align-self: flex-start;
+  position: relative;
+  overflow: hidden;
+  background-color: #8ab4f8;
+  color: #0b0f26;
+  border: none;
+  border-radius: 10px;
+  height: 40px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  user-select: none;
+  padding: 0 1.25rem;
+  flex-shrink: 0;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  --x: 50%;
+  --y: 50%;
+}
+button.download-btn::before {
+  content: "";
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  transform: translate(-50%, -50%);
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, rgb(255 255 255 / 0.25) 0%, transparent 60%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+button.download-btn:hover::before {
+  opacity: 1;
+}
+button.download-btn:hover {
+  background-color: #d1dbff;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.8);
+}
+
+/* Folder style - if used */
+li.folder {
+  font-size: 1.15rem;
+  color: #89b;
+  padding-left: 1.25rem;
+  margin-top: 1.5rem;
+  user-select: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0f26;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #4e5ab0 0%, #8ab4f8 100%);
+  border: 3px solid #0b0f26;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #5f6cc7 0%, #b2c4ff 100%);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #4e5ab0 #0b0f26;
+}
+::-webkit-scrollbar-button {
+  display: none;
+  height: 0;
+  width: 0;
+}
+
+/* Mobile adjustments */
+@media (max-width: 960px) {
+  ul#file-list {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 720px;
+  }
+}
+
+@media (max-width: 560px) {
+  header.topbar {
+    font-size: 0.95rem;
+    padding: 0.5rem 1.2rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .right-controls {
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+  ul#file-list {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+  }
+  li.file {
+    min-height: auto;
+    max-height: none;
+  }
+  .filename-box {
+    width: 100%;
+  }
+}
+    </style>
   </head>
   <body>
     <canvas id="sky"></canvas>
@@ -53,88 +366,114 @@
     return JSON.parse(jsonLike);
   }
 
-  async function displayFiles() {
-    const fileList = document.getElementById('file-list');
-    fileList.innerHTML = '';
-    const metaData = await loadFileMeta();
+async function displayFiles() {
+  const fileList = document.getElementById('file-list');
+  fileList.innerHTML = '';
+  const metaData = await loadFileMeta();
 
-    const folder = mega.File.fromURL('https://mega.nz/folder/ak5WhZpa#fAD6NBnZi9mfOT5UIeQWhA');
-    await folder.loadAttributes();
+  const folder = mega.File.fromURL('https://mega.nz/folder/ak5WhZpa#fAD6NBnZi9mfOT5UIeQWhA');
+  await folder.loadAttributes();
 
-    const walk = async (node) => {
-      if (node.directory) {
-        for (const child of node.children) {
-          await walk(child);
-        }
-      } else {
-        const li = document.createElement('li');
-        li.className = 'file';
-
-        const info = metaData[node.name] || {
-          desc: 'No desc',
-          uploader: 'Pvhak',
-          verified: false
-        };
-
-        // Create the filename container with badge
-        const titleContainer = document.createElement('div');
-        titleContainer.className = 'filename-container';
-
-        const title = document.createElement('div');
-        title.className = 'filename-box';
-        title.textContent = node.name;
-
-        const statusBadge = document.createElement('div');
-        statusBadge.className = 'status-badge ' + (info.verified ? 'verified' : 'unverified');
-        statusBadge.textContent = info.verified ? 'Verified' : 'Unverified';
-
-        titleContainer.appendChild(title);
-        titleContainer.appendChild(statusBadge);
-
-        const desc = document.createElement('div');
-        desc.textContent = `Description: ${info.desc}`;
-
-        const uploader = document.createElement('div');
-        uploader.textContent = `Uploaded by: ${info.uploader}`;
-
-        const size = document.createElement('div');
-        size.textContent = `File size: ${fms(node.size)}`;
-
-        const btn = document.createElement('button');
-        btn.className = 'download-btn';
-        btn.textContent = 'download';
-        btn.onclick = async () => {
-          btn.disabled = true;
-          btn.textContent = 'downloading';
-          try {
-            const buf = await node.downloadBuffer();
-            const blob = new Blob([buf]);
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = node.name;
-            a.click();
-            URL.revokeObjectURL(url);
-          } catch (err) {
-            alert('Download failed');
-          } finally {
-            btn.disabled = false;
-            btn.textContent = 'download';
-          }
-        };
-
-        li.appendChild(titleContainer);
-        li.appendChild(desc);
-        li.appendChild(uploader);
-        li.appendChild(size);
-        li.appendChild(btn);
-
-        fileList.appendChild(li);
+  const walk = async (node) => {
+    if (node.directory) {
+      for (const child of node.children) {
+        await walk(child);
       }
-    };
+    } else {
+      const li = document.createElement('li');
+      li.className = 'file';
 
-    await walk(folder);
-  }
+      const info = metaData[node.name] || {
+        desc: 'No desc',
+        uploader: 'Unknown',
+        verified: false,
+        lstupdby: 'N/A',
+        features: 'No features listed.'
+      };
+
+      // Top section: filename + badge
+      const headerRow = document.createElement('div');
+      headerRow.className = 'filename-container';
+
+      const filenameEl = document.createElement('div');
+      filenameEl.className = 'filename-box';
+      filenameEl.textContent = node.name;
+
+      const badge = document.createElement('div');
+      badge.className = 'status-badge ' + (info.verified ? 'verified' : 'unverified');
+      badge.textContent = info.verified ? 'Verified' : 'Unverified';
+
+      headerRow.appendChild(filenameEl);
+      headerRow.appendChild(badge);
+
+      // Description
+      const descLabel = document.createElement('div');
+      descLabel.style.color = '#aaa';
+      descLabel.style.fontSize = '0.9rem';
+      descLabel.textContent = 'Description';
+
+      const descText = document.createElement('div');
+      descText.style.marginBottom = '0.5rem';
+      descText.textContent = info.desc;
+
+      // Last updated by
+      const lastUpdated = document.createElement('div');
+      lastUpdated.style.fontSize = '0.85rem';
+      lastUpdated.style.marginBottom = '0.75rem';
+      lastUpdated.style.color = '#ccc';
+      lastUpdated.textContent = `Last updated by: ${info.lstupdby || 'N/A'}`;
+
+      // Features section
+      const featureLabel = document.createElement('div');
+      featureLabel.style.color = 'white';
+      featureLabel.style.fontWeight = 'bold';
+      featureLabel.style.marginTop = '0.5rem';
+      featureLabel.textContent = 'Features';
+
+      const featureText = document.createElement('div');
+      featureText.style.fontSize = '0.9rem';
+      featureText.style.whiteSpace = 'pre-wrap';
+      featureText.textContent = info.features || 'None listed.';
+
+      // Download button
+      const btn = document.createElement('button');
+      btn.className = 'download-btn';
+      btn.textContent = 'download';
+      btn.onclick = async () => {
+        btn.disabled = true;
+        btn.textContent = 'downloading';
+        try {
+          const buf = await node.downloadBuffer();
+          const blob = new Blob([buf]);
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = node.name;
+          a.click();
+          URL.revokeObjectURL(url);
+        } catch (err) {
+          alert('Download failed');
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'download';
+        }
+      };
+
+      li.appendChild(headerRow);
+      li.appendChild(descLabel);
+      li.appendChild(descText);
+      li.appendChild(lastUpdated);
+      li.appendChild(featureLabel);
+      li.appendChild(featureText);
+      li.appendChild(btn);
+
+      fileList.appendChild(li);
+    }
+  };
+
+  await walk(folder);
+}
+
 
   displayFiles();
 

@@ -34,111 +34,116 @@
     </main>
 
     <script src="/stuff/sky.js"></script>
-    <script>
-    function fms(bytes) {
-      if (bytes >= 1e9) return (bytes / 1e9).toFixed(2) + ' gb';
-      if (bytes >= 1e6) return (bytes / 1e6).toFixed(2) + ' mb';
-      if (bytes >= 1e3) return (bytes / 1e3).toFixed(2) + ' kb';
-      return bytes + ' bytes';
-    }
+<script>
+  function fms(bytes) {
+    if (bytes >= 1e9) return (bytes / 1e9).toFixed(2) + ' gb';
+    if (bytes >= 1e6) return (bytes / 1e6).toFixed(2) + ' mb';
+    if (bytes >= 1e3) return (bytes / 1e3).toFixed(2) + ' kb';
+    return bytes + ' bytes';
+  }
 
-    async function loadFileMeta() {
-      const res = await fetch('/stuff/data.json');
-      const rawText = await res.text();
-      const jsonLike = rawText
-        .replace(/^\s*files\s*=\s*/, '')
-        .replace(/\["(.+?)"\]\s*=/g, '"$1":')
-        .replace(/(\w+)\s*=/g, '"$1":')
-        .replace(/,?\s*}$/, '}');
-      return JSON.parse(jsonLike);
-    }
+  async function loadFileMeta() {
+    const res = await fetch('/stuff/data.json');
+    const rawText = await res.text();
+    const jsonLike = rawText
+      .replace(/^\s*files\s*=\s*/, '')
+      .replace(/\["(.+?)"\]\s*=/g, '"$1":')
+      .replace(/(\w+)\s*=/g, '"$1":')
+      .replace(/,?\s*}$/, '}');
+    return JSON.parse(jsonLike);
+  }
 
-    async function displayFiles() {
-      const fileList = document.getElementById('file-list');
-      fileList.innerHTML = '';
-      const metaData = await loadFileMeta();
+  async function displayFiles() {
+    const fileList = document.getElementById('file-list');
+    fileList.innerHTML = '';
+    const metaData = await loadFileMeta();
 
-      const folder = mega.File.fromURL('https://mega.nz/folder/ak5WhZpa#fAD6NBnZi9mfOT5UIeQWhA');
-      await folder.loadAttributes();
+    const folder = mega.File.fromURL('https://mega.nz/folder/ak5WhZpa#fAD6NBnZi9mfOT5UIeQWhA');
+    await folder.loadAttributes();
 
-      const walk = async (node) => {
-        if (node.directory) {
-          for (const child of node.children) {
-            await walk(child);
-          }
-        } else {
-          const li = document.createElement('li');
-          li.className = 'file';
-
-          const info = metaData[node.name] || {
-            desc: 'No desc',
-            uploader: 'Pvhak',
-            verified: false
-          };
-
-          const verifiedText = info.verified ? 'Verified' : 'Unverified';
-          const statusColor = info.verified ? '#2ecc71' : '#e74c3c';
-
-          const title = document.createElement('div');
-          title.className = 'filename-box';
-          title.style.backgroundColor = statusColor;
-          title.style.padding = '0.2rem 0.5rem';
-          title.style.borderRadius = '8px';
-          title.style.marginBottom = '0.5rem';
-          title.textContent = `${node.name} - ${verifiedText}`;
-
-          const desc = document.createElement('div');
-          desc.textContent = `Description: ${info.desc}`;
-
-          const uploader = document.createElement('div');
-          uploader.textContent = `Uploaded by: ${info.uploader}`;
-
-          const size = document.createElement('div');
-          size.textContent = `File size: ${fms(node.size)}`;
-
-          const btn = document.createElement('button');
-          btn.className = 'download-btn';
-          btn.textContent = 'download';
-          btn.onclick = async () => {
-            btn.disabled = true;
-            btn.textContent = 'downloading';
-            try {
-              const buf = await node.downloadBuffer();
-              const blob = new Blob([buf]);
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement('a');
-              a.href = url;
-              a.download = node.name;
-              a.click();
-              URL.revokeObjectURL(url);
-            } catch (err) {
-              alert('Download failed');
-            } finally {
-              btn.disabled = false;
-              btn.textContent = 'download';
-            }
-          };
-
-          li.appendChild(title);
-          li.appendChild(desc);
-          li.appendChild(uploader);
-          li.appendChild(size);
-          li.appendChild(btn);
-
-          fileList.appendChild(li);
+    const walk = async (node) => {
+      if (node.directory) {
+        for (const child of node.children) {
+          await walk(child);
         }
-      };
+      } else {
+        const li = document.createElement('li');
+        li.className = 'file';
 
-      await walk(folder);
-    }
+        const info = metaData[node.name] || {
+          desc: 'No desc',
+          uploader: 'Pvhak',
+          verified: false
+        };
 
-    displayFiles();
+        // Create the filename container with badge
+        const titleContainer = document.createElement('div');
+        titleContainer.className = 'filename-container';
 
-    document.getElementById('safety').addEventListener('click', (e) => {
-      e.preventDefault();
-      alert("Safety Notice:\n\nThese source projects are not officially verified for safety. Do not run any prebuilt .exe files included in the folders.");
-    });
-    </script>
+        const title = document.createElement('div');
+        title.className = 'filename-box';
+        title.textContent = node.name;
+
+        const statusBadge = document.createElement('div');
+        statusBadge.className = 'status-badge ' + (info.verified ? 'verified' : 'unverified');
+        statusBadge.textContent = info.verified ? 'Verified' : 'Unverified';
+
+        titleContainer.appendChild(title);
+        titleContainer.appendChild(statusBadge);
+
+        const desc = document.createElement('div');
+        desc.textContent = `Description: ${info.desc}`;
+
+        const uploader = document.createElement('div');
+        uploader.textContent = `Uploaded by: ${info.uploader}`;
+
+        const size = document.createElement('div');
+        size.textContent = `File size: ${fms(node.size)}`;
+
+        const btn = document.createElement('button');
+        btn.className = 'download-btn';
+        btn.textContent = 'download';
+        btn.onclick = async () => {
+          btn.disabled = true;
+          btn.textContent = 'downloading';
+          try {
+            const buf = await node.downloadBuffer();
+            const blob = new Blob([buf]);
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = node.name;
+            a.click();
+            URL.revokeObjectURL(url);
+          } catch (err) {
+            alert('Download failed');
+          } finally {
+            btn.disabled = false;
+            btn.textContent = 'download';
+          }
+        };
+
+        li.appendChild(titleContainer);
+        li.appendChild(desc);
+        li.appendChild(uploader);
+        li.appendChild(size);
+        li.appendChild(btn);
+
+        fileList.appendChild(li);
+      }
+    };
+
+    await walk(folder);
+  }
+
+  displayFiles();
+
+  document.getElementById('safety').addEventListener('click', (e) => {
+    e.preventDefault();
+    alert("Safety Notice:\n\nThese source projects are not officially verified for safety. Do not run any prebuilt .exe files included in the folders.");
+  });
+</script>
+
     <script src="https://unpkg.com/megajs@1/dist/main.browser-umd.js"></script>
     <script defer src="/_vercel/insights/script.js"></script>
   </body>

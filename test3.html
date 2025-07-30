@@ -410,11 +410,7 @@ async function displayFiles() {
       const descLabel = document.createElement('div');
       descLabel.style.color = '#aaa';
       descLabel.style.fontSize = '0.9rem';
-      descLabel.textContent = 'Description';
-
-      const descText = document.createElement('div');
-      descText.style.marginBottom = '0.5rem';
-      descText.textContent = info.desc;
+      descLabel.textContent = info.desc;
 
       // Last updated by
       const lastUpdated = document.createElement('div');
@@ -461,7 +457,6 @@ async function displayFiles() {
 
       li.appendChild(headerRow);
       li.appendChild(descLabel);
-      li.appendChild(descText);
       li.appendChild(lastUpdated);
       li.appendChild(featureLabel);
       li.appendChild(featureText);

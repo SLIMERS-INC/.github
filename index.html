@@ -18,8 +18,7 @@
       <nav class="right-controls" role="navigation" aria-label="Topbar links">
         <a href="#" id="safety" tabindex="0">Safety</a>
         <a href="https://mega.nz/folder/ak5WhZpa#fAD6NBnZi9mfOT5UIeQWhA" target="_blank" rel="noopener" class="mega-link" tabindex="0">Mega.nz</a>
-        <a href="https://discord.gg/rnhsqWfw8t" target="_blank" rel="noopener" class="mega-link" tabindex="0">Discord</a> <!-- slimers inc was here? -->
-
+        <a href="https://discord.gg/V6E6qbj5C4" target="_blank" rel="noopener" class="mega-link" tabindex="0">Discord</a> <!-- lol slimers inc..?? -->
       </nav>
     </header>
     <main class="content" role="main" tabindex="0">
@@ -33,17 +32,17 @@
       </footer>
     </main>
     <script src="https://unpkg.com/megajs@1/dist/main.browser-umd.js"></script>
-    <script defer src="/_vercel/insights/script.js"></script> <!-- xd! -->
+    <script defer src="/_vercel/insights/script.js"></script>
     <script src="/stuff/sky.js"></script>
     <script src="/stuff/filehandler.js"></script>
     <script>
-      document.getElementById('safety').addEventListener('click', (e) => {e.preventDefault();alert("\nthis project has been discontinued as of 26.8.2025\nno more files will be uploaded!");});
+      document.getElementById('safety').addEventListener('click', (e) => {e.preventDefault();alert("\nhi");});
       document.querySelectorAll('.download-btn').forEach((btn) => {
-      const rect = btn.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      btn.style.setProperty('--x', `${x}px`);
-      btn.style.setProperty('--y', `${y}px`);
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          btn.style.setProperty('--x', `${x}px`);
+          btn.style.setProperty('--y', `${y}px`);
       });
     </script>
   </body>

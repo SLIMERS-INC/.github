@@ -1,98 +1,114 @@
+// code beautified using https://jsonformatter.org/jsbeautifier ok thx bye
+
 function fms(bytes) {
-    if (bytes >= 1e9) return (bytes / 1e9).toFixed(2) + ' gb';
-    if (bytes >= 1e6) return (bytes / 1e6).toFixed(2) + ' mb';
-    if (bytes >= 1e3) return (bytes / 1e3).toFixed(2) + ' kb';
-    return bytes + ' bytes';
+	if (bytes >= 1e9) return (bytes / 1e9).toFixed(2) + ' gb';
+	if (bytes >= 1e6) return (bytes / 1e6).toFixed(2) + ' mb';
+	if (bytes >= 1e3) return (bytes / 1e3).toFixed(2) + ' kb';
+	return bytes + ' bytes';
 }
 
 (async () => {
-    try {
-        const folder = mega.File.fromURL('https://mega.nz/folder/ak5WhZpa#fAD6NBnZi9mfOT5UIeQWhA');
-        await folder.loadAttributes();
-        document.getElementById('file-list').innerHTML = '';
-        let fuh1 = 0; let fuh2 = 0;
+	try {
+		const folder = mega.File.fromURL('https://mega.nz/folder/ak5WhZpa#fAD6NBnZi9mfOT5UIeQWhA');
+		await folder.loadAttributes();
+		document.getElementById('file-list').innerHTML = '';
+		let fuh1 = 0;
+		let fuh2 = 0;
 
-        const walk = async (node, depth = 0) => {
-            if (node.directory) {
-                for (const child of node.children) {
-                    await walk(child, depth + 1);
-                }
-            } else {
-                fuh1++;
-                fuh2 += node.size;
+		const walk = async (node, depth = 0) => {
+			if (node.directory) {
+				for (const child of node.children) {
+					await walk(child, depth + 1);
+				}
+			} else {
+				fuh1++;
+				fuh2 += node.size;
 
-                const li = document.createElement('li');
-                li.className = 'file' + (depth ? ' sub' : '');
-                if (depth) li.style.paddingLeft = `${depth * 1.5}rem`;
+				const li = document.createElement('li');
+				li.className = 'file' + (depth ? ' sub' : '');
+				if (depth) li.style.paddingLeft = `${depth * 1.5}rem`;
 
-                const size = fms(node.size);
-                
-                console.log(node.name);
-                const name = document.createElement('div');
-                name.className = 'filename-box';
-                name.textContent = node.name.replace(/\.(7z|zip|rar)$/i, ''); // ye
+				const size = fms(node.size);
 
-                const sizebox = document.createElement('div');
-                sizebox.className = 'filesize-box';
-                sizebox.textContent = size;
+				console.log(node.name);
+				const name = document.createElement('div');
+				name.className = 'filename-box';
+				name.textContent = node.name.replace(/\.(7z|zip|rar)$/i, ''); // ye
 
-                const btn = document.createElement('button');
-                btn.className = 'download-btn';
-                btn.textContent = 'download';
+				const sizebox = document.createElement('div');
+				sizebox.className = 'filesize-box';
+				sizebox.textContent = size;
 
-                btn.onclick = async () => {
-                    if (btn.disabled) return;
-                    btn.disabled = true;
+				const btn = document.createElement('button');
+				btn.className = 'download-btn';
+				btn.textContent = 'download';
 
-                    let dots = 0;
-                    btn.textContent = 'downloading';
-                    const anim = setInterval(() => {
-                        dots = (dots + 1) % 4;
-                        btn.textContent = 'downloading' + '.'.repeat(dots);
-                    }, 500);
+				btn.onclick = async () => {
+					if (btn.disabled) return;
+					btn.disabled = true;
 
-                    try {
-                        const buf = await node.downloadBuffer();
-                        const blob = new Blob([buf]);
-                        const url = URL.createObjectURL(blob);
+					const total = node.size;
+					let downloaded = 0;
 
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = node.name;
-                        document.body.appendChild(a);
-                        a.click();
-                        a.remove();
+					btn.textContent = '0%';
 
-                        URL.revokeObjectURL(url);
+					try {
+						const stream = node.download();
 
-                    } catch (e) {
-                        console.error('download error:', e);
-                        alert('download failed :(');
-                    } finally {
-                        clearInterval(anim);
-                        btn.textContent = 'download';
-                        btn.disabled = false;
-                    }
-                };
+						const chunks = [];
+						stream.on('data', chunk => {
+							chunks.push(chunk);
+							downloaded += chunk.length;
 
-                const rightgrp = document.createElement('div');
-                rightgrp.className = 'right-group';
-                rightgrp.appendChild(sizebox);
-                rightgrp.appendChild(btn);
+							const percent = ((downloaded / total) * 100).toFixed(1);
+							btn.textContent = percent + '%';
+						});
 
-                li.appendChild(name);
-                li.appendChild(rightgrp);
-                document.getElementById('file-list').appendChild(li);
-            }
-        };
+						await new Promise((resolve, reject) => {
+							stream.on('end', resolve);
+							stream.on('error', reject);
+						});
 
-        await walk(folder);
-        console.log(`loaded ${fuh1} files`);
-        console.log(`these fuckass files take up ${fms(fuh2)}`);
-        console.log(`last updated 28/9/2025`);
-        console.log(`Note: uploaded some files :3`);
-    } catch (e) {
-        console.error(e);
-        document.getElementById('file-list').textContent = 'error loading :( refresh website!!';
-    }
+						const blob = new Blob(chunks);
+						const url = URL.createObjectURL(blob);
+
+						const a = document.createElement('a');
+						a.href = url;
+						a.download = node.name;
+						document.body.appendChild(a);
+						a.click();
+						a.remove();
+
+						URL.revokeObjectURL(url);
+
+					} catch (e) {
+						console.error('download error:', e);
+						alert('download failed - check console for more info');
+					} finally {
+						btn.textContent = 'download';
+						btn.disabled = false;
+					}
+				};
+
+
+				const rightgrp = document.createElement('div');
+				rightgrp.className = 'right-group';
+				rightgrp.appendChild(sizebox);
+				rightgrp.appendChild(btn);
+
+				li.appendChild(name);
+				li.appendChild(rightgrp);
+				document.getElementById('file-list').appendChild(li);
+			}
+		};
+
+		await walk(folder);
+		console.log(`loaded ${fuh1} files`);
+		console.log(`these fuckass files take up ${fms(fuh2)}`);
+		console.log(`last updated 11/1/2026`);
+		console.log(`Note: first update of 2026`);
+	} catch (e) {
+		console.error(e);
+		document.getElementById('file-list').textContent = 'error loading :( refresh website!!';
+	}
 })();

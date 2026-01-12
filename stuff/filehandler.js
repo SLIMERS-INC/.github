@@ -103,10 +103,11 @@ function fms(bytes) {
 		};
 
 		await walk(folder);
+		console.log(`-----------------------`);
 		console.log(`loaded ${fuh1} files`);
 		console.log(`these fuckass files take up ${fms(fuh2)}`);
-		console.log(`last updated 11/1/2026`);
-		console.log(`Note: first update of 2026`);
+		console.log(`last updated 12/1/2026`);
+		console.log(`note: bleh`);
 	} catch (e) {
 		console.error(e);
 		document.getElementById('file-list').textContent = 'error loading :( refresh website!!';

@@ -31,18 +31,26 @@
         </p>
       </footer>
     </main>
+    <div id="alerttt">
+      <span>unfortunately the old storage got banned, some source code files have been lost</span>
+      <button id="close" aria-label="close">×</button>
+    </div>
+    <script>
+      document.getElementById('alerttt').addEventListener('click', () => {
+        document.getElementById('alerttt').style.display = 'none';
+        document.body.style.paddingTop = '0';
+        document.querySelector('header.topbar').style.top = '20px';
+        document.querySelector('main.content').style.paddingTop = '90px';
+      });
+    </script>
     <script src="https://unpkg.com/megajs@1/dist/main.browser-umd.js"></script>
     <script defer src="/_vercel/insights/script.js"></script>
     <script src="/stuff/sky.js"></script>
     <script src="/stuff/filehandler.js"></script>
     <script>
-      document.getElementById('safety').addEventListener('click', (e) => {e.preventDefault(); alert("\nplease dont run any prebuilt files and always check the projects for rats\n- none of the files have been checked\n\n89 was here...."); });
-      document.querySelectorAll('.download-btn').forEach((btn) => {
-          const rect = btn.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          btn.style.setProperty('--x', `${x}px`);
-          btn.style.setProperty('--y', `${y}px`);
+      document.getElementById('safety').addEventListener('click', (e) => {
+        e.preventDefault();
+        alert("\nplease dont run any prebuilt files and always check the projects for rats\n- none of the files have been checked\n\n89 was here....");
       });
     </script>
   </body>

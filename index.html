@@ -12,10 +12,10 @@
   </head>
   <body>
     <canvas id="sky"></canvas>
-    <header class="topbar" role="banner" aria-label="Main navigation">
+    <header class="topbar" role="banner">
       <div class="title-text">skidbin</div>
       <div class="flex-spacer"></div>
-      <nav class="right-controls" role="navigation" aria-label="Topbar links">
+      <nav class="right-controls" role="navigation">
         <a href="#" id="safety" tabindex="0">Safety</a>
         <a href="https://mega.nz/folder/ak5WhZpa#fAD6NBnZi9mfOT5UIeQWhA" target="_blank" rel="noopener" class="mega-link" tabindex="0">Mega.nz</a>
         <a href="https://discord.com/invite/skidding" target="_blank" rel="noopener" class="mega-link" tabindex="0">Discord</a> <!-- :p -->
@@ -31,18 +31,6 @@
         </p>
       </footer>
     </main>
-    <div id="alerttt">
-      <span>unfortunately the old storage got banned, some source code files have been lost</span>
-      <button id="close" aria-label="close">×</button>
-    </div>
-    <script>
-      document.getElementById('alerttt').addEventListener('click', () => {
-        document.getElementById('alerttt').style.display = 'none';
-        document.body.style.paddingTop = '0';
-        document.querySelector('header.topbar').style.top = '20px';
-        document.querySelector('main.content').style.paddingTop = '90px';
-      });
-    </script>
     <script src="https://unpkg.com/megajs@1/dist/main.browser-umd.js"></script>
     <script defer src="/_vercel/insights/script.js"></script>
     <script src="/stuff/sky.js"></script>

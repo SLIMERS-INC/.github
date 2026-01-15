@@ -9,7 +9,7 @@ function fms(bytes) {
 
 (async () => {
 	try {
-		const folder = mega.File.fromURL('https://mega.nz/folder/ak5WhZpa#fAD6NBnZi9mfOT5UIeQWhA');
+		const folder = mega.File.fromURL('https://mega.nz/folder/wjdHxA6A#i8uws2cNEWjKODm1Gkzbdw');
 		await folder.loadAttributes();
 		document.getElementById('file-list').innerHTML = '';
 		let fuh1 = 0;

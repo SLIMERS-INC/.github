@@ -11,7 +11,8 @@ function fms(bytes) {
     try {
         const folders = [
             'https://mega.nz/folder/wjdHxA6A#i8uws2cNEWjKODm1Gkzbdw',
-            'https://mega.nz/folder/i85QmZ5S#cd3G_u8bIysCTfT_2RfD7w'
+            'https://mega.nz/folder/i85QmZ5S#cd3G_u8bIysCTfT_2RfD7w',
+            'https://mega.nz/folder/DmxwwCKL#iyEEorgo4a7TqJNdK8kxFw'
         ];
 
         document.getElementById('file-list').innerHTML = '';

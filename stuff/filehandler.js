@@ -16,8 +16,8 @@ function fms(bytes) {
         ];
 
         document.getElementById('file-list').innerHTML = '';
-        let totalFiles = 0;
-        let totalBytes = 0;
+        let totalfiles = 0;
+        let totalbytes = 0;
 
         const walk = async (node, depth = 0) => {
             if (node.directory) {
@@ -25,8 +25,8 @@ function fms(bytes) {
                     await walk(child, depth + 1);
                 }
             } else {
-                totalFiles++;
-                totalBytes += node.size;
+                totalfiles++;
+                totalbytes += node.size;
 
                 const li = document.createElement('li');
                 li.className = 'file' + (depth ? ' sub' : '');
@@ -108,9 +108,9 @@ function fms(bytes) {
         }
 
         console.log(`-----------------------`);
-        console.log(`loaded ${totalFiles} files, total size: ${fms(totalBytes)}`);
-        console.log(`last updated 20/1/2026`);
-        console.log(`note: added more files :p`);
+        console.log(`loaded ${totalfiles} files, total size: ${fms(totalbytes)}`);
+        console.log(`site last updated; 7/17/2026`);
+        console.log(`note: yes im still adding more files just too lazy to note it`);
     } catch (e) {
         console.error(e);
         document.getElementById('file-list').textContent = 'error loading :( refresh website!!';
